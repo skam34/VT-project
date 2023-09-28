@@ -4,23 +4,22 @@ const Header = (props) => {
   )
 }
 
-// not used anymore
-// 
-// const Content = (props) => {
-//   return (
-//   <>
-//   <p>
-//     {props.p1} {props.e1}
-//   </p>
-//   <p>
-//     {props.p2} {props.e2}
-//   </p>
-//   <p>
-//     {props.p3} {props.e3}
-//   </p>
-//   </>
-//   )
-// }
+// nevermind...
+const Content = (props) => {
+  return (
+  <>
+  <p>
+    {props.parts[0].name} {props.parts[0].exercises}
+  </p>
+  <p>
+    {props.parts[1].name} {props.parts[1].exercises}
+  </p>
+  <p>
+    {props.parts[2].name} {props.parts[2].exercises}
+  </p>
+  </>
+  )
+}
 
 const Part = (props) => {
   return (
@@ -58,9 +57,7 @@ const App = () => {
     <div>
       <Header name={course}/>
 
-      <Part p={parts[0]}/>
-      <Part p={parts[1]}/>
-      <Part p={parts[2]}/>
+      <Content parts={parts}/>
       
       <Total e1={parts[0]} e2={parts[1]} e3={parts[2]}/>
     </div>
