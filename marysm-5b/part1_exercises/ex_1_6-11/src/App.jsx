@@ -7,26 +7,27 @@ const Button = ({text, onClickHandler}) => (
 )
 
 const ScoreDisplay = ({text, number}) => (
-  <p>{text} - {number}</p>
+  <p>{text}: {number}</p>
 )
 
-const Feedback = ({handlers = [goodHandler, neutralHandler, badHandler]}) => {
+const Feedback = ({goodHandler, neutralHandler, badHandler}) => {
     return (
       <div>
         <h1>Give Feedback</h1>
-        <Button text="Good" onClickHandler={handlers[0]}/>
-        <Button text="Neutral" onClickHandler={handlers[1]}/>
-        <Button text="Bad" onClickHandler={handlers[2]}/>
+        <Button text="Good" onClickHandler={goodHandler}/>
+        <Button text="Neutral" onClickHandler={neutralHandler}/>
+        <Button text="Bad" onClickHandler={badHandler}/>
       </div>
     )
 }
 
-const Statistics = (scores = [good, neutral, bad, score]) => {
+const Statistics = ({good, neutral, bad, total}) => {
   return (
     <div>
       <ScoreDisplay text="Good" number={good}/>
       <ScoreDisplay text="Neutral" number={neutral}/>
       <ScoreDisplay text="Bad" number={bad}/>
+      <ScoreDisplay text="Total rating" number={total}/>
     </div>
   )
 }
@@ -42,15 +43,18 @@ function App() {
 
 
   const goodHandler = () => {
+    console.log("Good:", good+1)
     setGood(good+1)
     setAll(all.concat('G'))
     setScore(score+1)
   }
   const neutralHandler = () => {
+    console.log("Neutral", neutral+1)
     setNeutral(neutral+1)
     setAll(all.concat('N'))
   }
   const badHandler = () => {
+    console.log("Evil", bad+1)
     setBad(bad+1)
     setAll(all.concat('B'))
     setScore(score-1)
@@ -58,10 +62,10 @@ function App() {
 
   return (
     <>
-      <Feedback handlers={[goodHandler, neutralHandler, badHandler]}/>
+      <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
       <br/>
       <br/>
-      <Statistics score={[good, neutral, bad, score]}/>
+      <Statistics good={good} neutral={neutral} bad={bad} total={score}/>
     </>
   )
 }
