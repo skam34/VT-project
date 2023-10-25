@@ -21,13 +21,19 @@ const Feedback = ({goodHandler, neutralHandler, badHandler}) => {
     )
 }
 
-const Statistics = ({good, neutral, bad, total}) => {
+const Statistics = ({good, neutral, bad, total, in_order}) => {
+  let positive_percent = (good/(good+bad+neutral))*100 + "%"
+  let average = ((good*1 + bad*-1)/(good+bad))
+  
   return (
     <div>
       <ScoreDisplay text="Good" number={good}/>
       <ScoreDisplay text="Neutral" number={neutral}/>
       <ScoreDisplay text="Bad" number={bad}/>
       <ScoreDisplay text="Total rating" number={total}/>
+      <ScoreDisplay text="Average" number={average}/>
+      <ScoreDisplay text="Positive" number={positive_percent}/>
+      <ScoreDisplay text="Order" number={in_order}/>
     </div>
   )
 }
@@ -38,9 +44,7 @@ function App() {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   const [all, setAll] = useState([])
-  
   const [score, setScore] = useState(0)
-
 
   const goodHandler = () => {
     console.log("Good:", good+1)
@@ -65,7 +69,7 @@ function App() {
       <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
       <br/>
       <br/>
-      <Statistics good={good} neutral={neutral} bad={bad} total={score}/>
+      <Statistics good={good} neutral={neutral} bad={bad} total={score} in_order={all}/>
     </>
   )
 }
