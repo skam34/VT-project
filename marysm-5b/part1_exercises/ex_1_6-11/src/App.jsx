@@ -17,7 +17,7 @@ const Feedback = ({goodHandler, neutralHandler, badHandler}) => {
         <Button text="Good" onClickHandler={goodHandler}/>
         <Button text="Neutral" onClickHandler={neutralHandler}/>
         <Button text="Bad" onClickHandler={badHandler}/>
-      </div>
+      </div> 
     )
 }
 
