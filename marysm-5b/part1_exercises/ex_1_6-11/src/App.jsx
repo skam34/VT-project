@@ -30,14 +30,16 @@ const Statistics = ({good, neutral, bad, total, in_order}) => {
   
   return (
     <table>
-      <th><td>Category</td><td>Score</td></th>
-      <ScoreDisplay text="Good" number={good}/>
-      <ScoreDisplay text="Neutral" number={neutral}/>
-      <ScoreDisplay text="Bad" number={bad}/>
-      <ScoreDisplay text="Total rating" number={total}/>
-      <ScoreDisplay text="Average" number={average}/>
-      <ScoreDisplay text="Positive" number={positive_percent}/>
-      <ScoreDisplay text="Order" number={in_order}/>
+      <thead><tr><th>Category</th><th>Score</th></tr></thead>
+      <tbody>
+        <ScoreDisplay text="Good" number={good}/>
+        <ScoreDisplay text="Neutral" number={neutral}/>
+        <ScoreDisplay text="Bad" number={bad}/>
+        <ScoreDisplay text="Total rating" number={total}/>
+        <ScoreDisplay text="Average" number={average}/>
+        <ScoreDisplay text="Positive" number={positive_percent}/>
+        <ScoreDisplay text="Order" number={in_order}/>
+      </tbody>
     </table>
   )
 }
