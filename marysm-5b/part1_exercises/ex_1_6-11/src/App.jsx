@@ -27,6 +27,9 @@ const Feedback = ({goodHandler, neutralHandler, badHandler}) => {
 const Statistics = ({good, neutral, bad, total, in_order}) => {
   let positive_percent = (good/(good+bad+neutral))*100 + "%"
   let average = ((good*1 + bad*-1)/(good+bad))
+  if (good+bad == 0) { // to prevent NaN
+    average = 0
+  }
   
   return (
     <table>
@@ -44,7 +47,37 @@ const Statistics = ({good, neutral, bad, total, in_order}) => {
   )
 }
 
+const Anecdotes = ({anecdotes=[], currentAnecdote, onClickHandler}) => {
+  return (
+    <>
+      <div>
+        {anecdotes[currentAnecdote]}
+      </div>
+      <Button text={"Next Anecdote"} onClickHandler={onClickHandler}/>
+    </>
+  )
+}
+
 function App() {
+  ///*
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
+
+  
+  
+  const [currentAnecdote, setCurrentAnecdote] = useState([Math.floor(Math.random() * anecdotes.length), false]) // [random_number, is_first_render?]
+  // not sure how i managed to get it to work but it does so yay ^^
+
+  console.log("--------------------------------", currentAnecdote)
+  //*/
   // good/neutral/bad/all reviews
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
@@ -70,9 +103,23 @@ function App() {
     setScore(score-1)
   }
 
+  const nextAnecdoteHandler = () => {
+    let helper = 0
+    let prev = currentAnecdote[0]
+    if (currentAnecdote[0] < anecdotes.length-1) {
+      setCurrentAnecdote([currentAnecdote[0]+1, true])
+      helper = currentAnecdote[0]+1
+    } else {
+      setCurrentAnecdote([0, true])
+    }
+    console.log("Previous Anecdote number", prev)
+    console.log("Current Anecdote number", helper)
+  }
+
   if (good + bad + neutral) {
     return (
       <>
+        <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} onClickHandler={nextAnecdoteHandler}/>
         <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
         <br/>
         <br/>
@@ -82,6 +129,7 @@ function App() {
   } else {
     return (
         <>
+          <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} onClickHandler={nextAnecdoteHandler}/>
           <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
         </>
     )
