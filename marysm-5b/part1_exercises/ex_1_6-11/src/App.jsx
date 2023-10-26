@@ -64,14 +64,22 @@ function App() {
     setScore(score-1)
   }
 
-  return (
-    <>
-      <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
-      <br/>
-      <br/>
-      <Statistics good={good} neutral={neutral} bad={bad} total={score} in_order={all}/>
-    </>
-  )
+  if (good + bad + neutral) {
+    return (
+      <>
+        <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
+        <br/>
+        <br/>
+        <Statistics good={good} neutral={neutral} bad={bad} total={score} in_order={all}/>
+      </>
+    )
+  } else {
+    return (
+        <>
+          <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
+        </>
+    )
+  }
 }
 
 export default App
