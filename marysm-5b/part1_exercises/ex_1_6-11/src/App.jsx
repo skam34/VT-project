@@ -47,13 +47,14 @@ const Statistics = ({good, neutral, bad, total, in_order}) => {
   )
 }
 
-const Anecdotes = ({anecdotes=[], currentAnecdote, onClickHandler}) => {
+const Anecdotes = ({anecdotes=[], currentAnecdote, nextHandler, voteHandler}) => {
   return (
     <>
       <div>
         {anecdotes[currentAnecdote]}
       </div>
-      <Button text={"Next Anecdote"} onClickHandler={onClickHandler}/>
+      <Button text={"Vote"} onClickHandler={voteHandler}/>
+      <Button text={"Next Anecdote"} onClickHandler={nextHandler}/>
     </>
   )
 }
@@ -69,11 +70,11 @@ function App() {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
-  ]
-
-  
+  ]  
   
   const [currentAnecdote, setCurrentAnecdote] = useState([Math.floor(Math.random() * anecdotes.length), false]) // [random_number, is_first_render?]
+  const [currentAnecdoteScores, setCurrentAnecdoteScores] = useState([0, 0, 0, 0, 0, 0, 0, 0])
+  
   // not sure how i managed to get it to work but it does so yay ^^
 
   console.log("--------------------------------", currentAnecdote)
@@ -103,6 +104,16 @@ function App() {
     setScore(score-1)
   }
 
+  const voteHandler = (an, current, scores) => {
+    return () => {
+      const copy = [scores]
+      copy[current]++
+      // console.log("voted for:", an[current], "(" + copy[current] + ")")
+      setCurrentAnecdoteScores(copy)
+      console.log(an[0])
+    }
+  }
+
   const nextAnecdoteHandler = () => {
     let helper = 0
     let prev = currentAnecdote[0]
@@ -119,7 +130,7 @@ function App() {
   if (good + bad + neutral) {
     return (
       <>
-        <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} onClickHandler={nextAnecdoteHandler}/>
+        <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} nextHandler={nextAnecdoteHandler} voteHandler={voteHandler(anecdotes, currentAnecdote, currentAnecdoteScores)}/>
         <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
         <br/>
         <br/>
@@ -129,7 +140,7 @@ function App() {
   } else {
     return (
         <>
-          <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} onClickHandler={nextAnecdoteHandler}/>
+          <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} nextHandler={nextAnecdoteHandler} voteHandler={voteHandler((anecdotes, currentAnecdote, currentAnecdoteScores))}/>
           <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
         </>
     )
