@@ -7,7 +7,10 @@ const Button = ({text, onClickHandler}) => (
 )
 
 const ScoreDisplay = ({text, number}) => (
-  <p>{text}: {number}</p>
+  <tr>
+    <td>{text}</td>
+    <td>{number}</td>
+  </tr>
 )
 
 const Feedback = ({goodHandler, neutralHandler, badHandler}) => {
@@ -26,7 +29,8 @@ const Statistics = ({good, neutral, bad, total, in_order}) => {
   let average = ((good*1 + bad*-1)/(good+bad))
   
   return (
-    <div>
+    <table>
+      <th><td>Category</td><td>Score</td></th>
       <ScoreDisplay text="Good" number={good}/>
       <ScoreDisplay text="Neutral" number={neutral}/>
       <ScoreDisplay text="Bad" number={bad}/>
@@ -34,7 +38,7 @@ const Statistics = ({good, neutral, bad, total, in_order}) => {
       <ScoreDisplay text="Average" number={average}/>
       <ScoreDisplay text="Positive" number={positive_percent}/>
       <ScoreDisplay text="Order" number={in_order}/>
-    </div>
+    </table>
   )
 }
 
