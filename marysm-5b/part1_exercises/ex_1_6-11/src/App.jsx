@@ -44,7 +44,7 @@ function App() {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   const [all, setAll] = useState([])
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState(0) 
 
   const goodHandler = () => {
     console.log("Good:", good+1)
