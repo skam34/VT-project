@@ -47,7 +47,7 @@ const Statistics = ({good, neutral, bad, total, in_order}) => {
   )
 }
 
-const Anecdotes = ({anecdotes=[], currentAnecdote, nextHandler, voteHandler}) => {
+const Anecdotes = ({anecdotes=[], currentAnecdote, nextHandler, voteHandler, currentAnecdoteScores=[]}) => {
   return (
     <>
       <div>
@@ -55,6 +55,29 @@ const Anecdotes = ({anecdotes=[], currentAnecdote, nextHandler, voteHandler}) =>
       </div>
       <Button text={"Vote"} onClickHandler={voteHandler}/>
       <Button text={"Next Anecdote"} onClickHandler={nextHandler}/>
+      <p>Has {currentAnecdoteScores[currentAnecdote]} votes</p>
+    </>
+  )
+}
+
+const MostVotes = ({anecdotes=[], currentAnecdoteScores=[]}) => {
+  let most_votes = 0;
+  let most_votes_index = 0;
+  
+  for (let i = 0; i < anecdotes.length; i++) {
+    if (currentAnecdoteScores[i] > most_votes) {
+      most_votes = currentAnecdoteScores[i]
+      most_votes_index = i
+    }
+  }
+
+  return (
+    <>
+      <h1>Most voted anecdote</h1>
+      <div>
+        {anecdotes[most_votes_index]}
+      </div>
+      <p>Has {currentAnecdoteScores[most_votes_index]} votes</p>
     </>
   )
 }
@@ -74,10 +97,12 @@ function App() {
   
   const [currentAnecdote, setCurrentAnecdote] = useState([Math.floor(Math.random() * anecdotes.length), false]) // [random_number, is_first_render?]
   const [currentAnecdoteScores, setCurrentAnecdoteScores] = useState([0, 0, 0, 0, 0, 0, 0, 0])
-  
-  // not sure how i managed to get it to work but it does so yay ^^
 
-  console.log("--------------------------------", currentAnecdote)
+  //check currentAnecdote
+  //  console.log("--------------------------------", currentAnecdote)
+
+
+
   //*/
   // good/neutral/bad/all reviews
   const [good, setGood] = useState(0)
@@ -104,33 +129,39 @@ function App() {
     setScore(score-1)
   }
 
-  const voteHandler = (an, current, scores) => {
+  const voteHandler = (an, current) => {
     return () => {
-      const copy = [scores]
-      copy[current]++
+      const copy = [...currentAnecdoteScores]
+      copy[an[0]] += 1
       // console.log("voted for:", an[current], "(" + copy[current] + ")")
       setCurrentAnecdoteScores(copy)
-      console.log(an[0])
+      // console.log(an[0], "votes: " + currentAnecdoteScores[an[0]])
     }
   }
 
   const nextAnecdoteHandler = () => {
     let helper = 0
     let prev = currentAnecdote[0]
-    if (currentAnecdote[0] < anecdotes.length-1) {
+    helper = Math.floor(Math.random() * anecdotes.length)
+    setCurrentAnecdote([helper, true])
+    /*if (currentAnecdote[0] < anecdotes.length-1) {
       setCurrentAnecdote([currentAnecdote[0]+1, true])
       helper = currentAnecdote[0]+1
     } else {
       setCurrentAnecdote([0, true])
     }
+    //*/ // poprzednim razem zle zinterpretowalem zadanie 
+    /*
     console.log("Previous Anecdote number", prev)
     console.log("Current Anecdote number", helper)
+    //*/
   }
 
   if (good + bad + neutral) {
     return (
       <>
-        <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} nextHandler={nextAnecdoteHandler} voteHandler={voteHandler(anecdotes, currentAnecdote, currentAnecdoteScores)}/>
+        <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} nextHandler={nextAnecdoteHandler} voteHandler={voteHandler(anecdotes, currentAnecdote)} currentAnecdoteScores={currentAnecdoteScores}/>
+        <MostVotes anecdotes={anecdotes} currentAnecdoteScores={currentAnecdoteScores}/>
         <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
         <br/>
         <br/>
@@ -140,7 +171,8 @@ function App() {
   } else {
     return (
         <>
-          <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} nextHandler={nextAnecdoteHandler} voteHandler={voteHandler((anecdotes, currentAnecdote, currentAnecdoteScores))}/>
+          <Anecdotes anecdotes={anecdotes} currentAnecdote={currentAnecdote[0]} nextHandler={nextAnecdoteHandler} voteHandler={voteHandler((anecdotes, currentAnecdote))} currentAnecdoteScores={currentAnecdoteScores}/>
+          <MostVotes anecdotes={anecdotes} currentAnecdoteScores={currentAnecdoteScores}/>
           <Feedback goodHandler={goodHandler} neutralHandler={neutralHandler} badHandler={badHandler}/>
         </>
     )
